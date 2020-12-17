@@ -1,12 +1,18 @@
 <?php
-require_once './Human.php';
 
-$human = new Human('Игорь', 'Столяров', 102);
-$human->sayHello();
+require_once './vendor/autoload.php';
+
+use App\Router;
+
+$router = new Router();
+$router->getRoute();
 
 
 
-$human2 = new Human('Павел', 'Мельников', 30);
-$human2->sayHello();
+
+
+
+
+
 
 
