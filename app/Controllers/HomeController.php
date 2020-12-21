@@ -4,9 +4,10 @@
 namespace App\Controllers;
 
 
-class HomeController
+
+class HomeController extends BaseController
 {
     public function index(){
-        echo 'Home controller';
+        $this->render('home.main');
     }
 }

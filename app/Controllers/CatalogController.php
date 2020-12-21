@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-class CatalogController
+class CatalogController extends BaseController
 {
     public function index(){
         echo 'Catalog controller';

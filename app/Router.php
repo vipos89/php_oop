@@ -1,33 +1,44 @@
 <?php
 
-
 namespace App;
 
 
 use App\Controllers\BlogController;
-use App\Controllers\CatalogController;
 use App\Controllers\HomeController;
 
 class Router
 {
+
+    private static $routes = [
+        '/' => HomeController::class . '@index',
+        '/blog/(\w+)' => BlogController::class . '@show',
+        '/blog/(\w+)/(\w+)' => BlogController::class . '@showPage',
+        // '/catalog/(\d+)' => BlogController::class.'@index',
+    ];
+
+    private static $routeArgs = [];
+
     public function getRoute()
     {
-
-        if ($_SERVER['REQUEST_URI'] == '/') {
-            $controller = new HomeController();
-            $controller->index();
-
-        } elseif ($_SERVER['REQUEST_URI'] == '/catalog') {
-            $controller = new CatalogController();
-            $controller->index();
-
-        } elseif ($_SERVER['REQUEST_URI'] == '/blog') {
-            $controller = new BlogController();
-            $controller->index();
+        $url = explode('?', $_SERVER['REQUEST_URI']);
+        $url = $url[0];
+        $controller = null;
+        foreach (self::$routes as $pattern => $callback) {
+            $pattern = '/^' . str_replace('/', '\/', $pattern) . '$/';
+            preg_match($pattern, $url, $params);
+            if ($params) {
+                $routeParams = explode('@', $callback);
+                $controller = new $routeParams[0];
+                array_shift($params);
+                self::$routeArgs = $params;
+                $controller->{$routeParams[1]}($params);
+                break;
+            }
         }
-        elseif ($_SERVER['REQUEST_URI'] == '/blog/234234') {
-            $controller = new BlogController();
-            $controller->show(234234);
-        }
+    }
+
+    public static function getRouteArgs()
+    {
+        return self::$routeArgs;
     }
 }
