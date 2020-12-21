@@ -8,10 +8,8 @@ define('base_path', __DIR__);
 define('DS', DIRECTORY_SEPARATOR);
 
 $router = new Router();
-//$router->getRoute();
-$router;
-$router->fullName = 'werwere';
-echo $router->fullName;
+$router->getRoute();
+
 
 
 
