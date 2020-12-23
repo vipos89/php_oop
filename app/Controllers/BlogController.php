@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\core\BaseController;
 use App\Helpers\Debugger;
 use App\Router;
 

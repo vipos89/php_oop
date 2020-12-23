@@ -12,7 +12,7 @@
         </div>
     </div>
 </header>
-
+<?= $user->username?> купил <?= $product->name?>
 <!-- Main Content -->
 <div class="container">
     <h1>Main Page</h1>
