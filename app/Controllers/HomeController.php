@@ -24,7 +24,7 @@ class HomeController extends BaseController
         $product->name = 'Product 2';
         $product->save();
         $prod2 = new Product();
-        ///
+
         $prod2->save();
 
 //        $this->render('home.main', [

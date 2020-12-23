@@ -20,10 +20,14 @@ abstract class Model
 
     }
 
-    public static function getAll()
+    public static function getAll($limit = null, $offset = null)
     {
+        $limitStr = null;
+        if ($limit || $offset) {
+            $limitStr = ' LIMIT ' . ($offset ?? 0) . ',' . ($limit ?? 100);
+        }
         $tableName = self::getTableName();
-        $sql = "select * from " . $tableName;
+        $sql = "select * from " . $tableName . $limitStr ;
         $connection = DB::getConnection();
         $res = $connection->query($sql);
         $arr = [];
@@ -38,28 +42,30 @@ abstract class Model
 
     public function save()
     {
-        if(isset($this->id) && !empty($this->id)){
+        if (isset($this->id) && !empty($this->id)) {
             // update
 
-        }else {
+        } else {
             // insert
-            static::create([]);
+            // static::create([]);
         }
+
+        echo 'not implemented';
 
     }
 
 
-    public static function create($arr =[])
+    public static function create($arr = [])
     {
         $keys = array_keys($arr);
-        $keys = '`'.implode('`,`', $keys).'`';
+        $keys = '`' . implode('`,`', $keys) . '`';
 
         $values = array_values($arr);
-        $values = "'".implode("','", $values)."'";
+        $values = "'" . implode("','", $values) . "'";
 
         $tableName = self::getTableName();
         $connection = DB::getConnection();
-        $sql = 'INSERT into '.$tableName. "($keys) VALUES ($values)";
+        $sql = 'INSERT into ' . $tableName . "($keys) VALUES ($values)";
         $connection->query($sql);
 
         return static::findById($connection->insert_id);
