@@ -10,14 +10,36 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Router;
 
-class CategoryController extends BaseController
+class ProductController extends BaseController
 {
     public $layout = 'admin';
-    // вывод списка
+
     public function index()
     {
-        $categories = Category::getAll();
-        return $this->render('admin.category.index', compact('categories'));
+        $count = count(Product::getAll());
+        $currentPage = $_GET['page'] ?? 1;
+        $currentPage = $currentPage < 1 ? 1 : $currentPage;
+        $limit = 5;
+        $offset = ($limit * ($currentPage - 1));
+        $offset = $offset > 0 ? $offset : 0;
+
+
+        $products = Product::selectWithConditions([
+            'order' => [
+                'field' => 'id',
+                'way' => 'DESC'
+            ],
+            'limit' => [
+                'limit' => 5,
+                'offset' => $offset
+            ]
+        ]);
+
+        $this->render('admin.products.index', [
+            'products' => $products,
+            'pages' => ceil($count / $limit),
+            'currentPage' => $currentPage
+        ]);
     }
 
     // отображение одного товара

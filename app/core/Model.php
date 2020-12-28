@@ -21,6 +21,57 @@ abstract class Model
 
     }
 
+    public static function selectWithConditions(array $arr)
+    {
+        $tableName = self::getTableName();
+        $sql = "SELECT * FROM " . $tableName;
+        if (isset($arr['where']) && !empty($arr['where'])) {
+            $sql .= ' Where ';
+            $split = false;
+            foreach ($arr['where'] as $condition) {
+                if (count($condition) == 2) {
+                    $split = true;
+                    $sql .= "`{$condition[0]}` = '{$condition[1]}' AND ";
+                } elseif (count($condition) == 3) {
+                    $split = true;
+                    $sql .= "`{$condition[0]}` {$condition[1]} '{$condition[2]}' AND ";
+                }
+            }
+            if ($split) {
+                $sql = substr($sql, 0, -5);
+            }
+        }
+
+
+        if (isset($arr['order']) && !empty($arr['order'])) {
+            if (count($arr['order']) == 2) {
+                $sql .= ' ORDER by ' . $arr['order']['field'] . ' ' . $arr['order']['way'];
+            } elseif (count($arr['order']) == 1) {
+                $sql .= ' ORDER by ' . $arr['order']['field'];
+            }
+        }
+        // TODO сделать проверки
+        if (isset($arr['limit']) && !empty($arr['limit'])) {
+            if (count($arr['limit']) == 2) {
+                $sql .= ' LIMIT ' . $arr['limit']['offset'] . ', ' . $arr['limit']['limit'];
+            } elseif (count($arr['limit']) == 1) {
+                $sql .= ' LIMIT ' . $arr['limit']['limit'];
+            }
+        }
+
+        $connection = DB::getConnection();
+        $res = $connection->query($sql);
+        $arr = [];
+        if ($res->num_rows) {
+
+            while ($obj = $res->fetch_object(static::class)) {
+                $arr[] = $obj;
+            }
+        }
+        return $arr;
+
+    }
+
     public static function getAll($limit = null, $offset = null)
     {
         $limitStr = null;
@@ -47,20 +98,17 @@ abstract class Model
         if (isset($this->id) && !empty($this->id)) {
             $sql = "UPDATE " . $table . " SET ";
             foreach (static::$fillable as $column) {
-                $sql .= "`$column` = '".$this->{$column}."' ,";
+                $sql .= "`$column` = '" . $this->{$column} . "' ,";
 
             }
-            $sql  = substr($sql, 0, -1);
+            $sql = substr($sql, 0, -1);
             $sql .= "WHERE id = " . $this->id;
-
-
             $connection = DB::getConnection();
             $connection->query($sql);
-            var_dump($sql);
+
             return static::findById($this->id);
 
         } else {
-            var_dump($this);
             $values = [];
             foreach (static::$fillable as $column) {
                 $values[$column] = $this->{$column};
@@ -105,9 +153,8 @@ abstract class Model
     public function load(array $arr)
     {
 
-        foreach ($arr as $key => $item){
-            if (in_array($key, static::$fillable, true))
-            {
+        foreach ($arr as $key => $item) {
+            if (in_array($key, static::$fillable, true)) {
                 $this->{$key} = $arr[$key];
             }
         }
@@ -117,7 +164,7 @@ abstract class Model
     {
         $tableName = self::getTableName();
         $connection = DB::getConnection();
-        $sql = "DELETE FROM ".$tableName." WHERE id = ".$id;
+        $sql = "DELETE FROM " . $tableName . " WHERE id = " . $id;
         return $connection->query($sql);
 
     }
