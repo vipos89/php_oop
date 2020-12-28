@@ -9,6 +9,7 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
+                    <th scope="col">id</th>
                     <th scope="col">Название товара</th>
                     <th scope="col">Категория товара</th>
                     <th scope="col">Действия</th>
@@ -19,8 +20,9 @@
                 <?php foreach ($products as $product): ?>
                     <tr>
 
+                        <td><?= $product->id ?></td>
                         <td><?= $product->name ?></td>
-                        <td><?= $product->name ?></td>
+                        <td><?= ($categories[$product->category_id])->name?? null ?></td>
                         <td>
                             <a href="/admin/product/show/<?= $product->id ?>" class="btn-info btn-sm ">Редактировать</a>
                             <a href="/admin/product/delete/<?= $product->id ?>" class="btn-danger btn-sm ">Удалить</a>

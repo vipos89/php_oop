@@ -6,6 +6,7 @@ namespace App\Controllers\Admin;
 
 use App\core\BaseController;
 use App\Helpers\Debugger;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Router;
@@ -35,10 +36,19 @@ class ProductController extends BaseController
             ]
         ]);
 
+        $categories = Category::getAll();
+        $categoryList = [];
+        foreach ($categories as $category){
+            $categoryList[$category->id] = $category;
+        }
+        unset($categories);
+
+
         $this->render('admin.products.index', [
             'products' => $products,
             'pages' => ceil($count / $limit),
-            'currentPage' => $currentPage
+            'currentPage' => $currentPage,
+            'categories' => $categoryList
         ]);
     }
 
@@ -46,8 +56,13 @@ class ProductController extends BaseController
     public function show()
     {
         $id = Router::getRouteArgs()[0];
-        $category = Category::findById($id);
-        return $this->render('admin.category.show', compact('category'));
+        $categories = Category::getAll();
+        $brands = Brand::getAll();
+        $product = Product::findById($id);
+
+        return $this->render('admin.products.show',
+            compact('categories', 'brands', 'product')
+        );
     }
 
     // редактировать товар
@@ -74,7 +89,15 @@ class ProductController extends BaseController
     // форма создания нового товара
     public function add()
     {
-        return $this->render('admin.category.show');
+
+        $categories = Category::getAll();
+        $brands = Brand::getAll();
+
+
+        return $this->render('admin.products.show',
+            compact('categories', 'brands')
+        );
+
     }
 
     public function delete()
