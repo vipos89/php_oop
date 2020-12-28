@@ -13,7 +13,7 @@ class HomeController extends BaseController
 {
     public function index()
     {
-        $user = User::findById(1);
+        // $user = User::findById(1);
 
         $product = Product::create([
             'name' => 'Product1',
@@ -23,9 +23,9 @@ class HomeController extends BaseController
 
         $product->name = 'Product 2';
         $product->save();
-        $prod2 = new Product();
-
-        $prod2->save();
+//        $prod2 = new Product();
+//
+//        $prod2->save();
 
 //        $this->render('home.main', [
 //            'user' => $user,

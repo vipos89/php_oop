@@ -3,6 +3,7 @@
 namespace App;
 
 
+use App\Controllers\Admin\CategoryController;
 use App\Controllers\BlogController;
 use App\Controllers\HomeController;
 
@@ -13,6 +14,12 @@ class Router
         '/' => HomeController::class . '@index',
         '/blog/(\w+)' => BlogController::class . '@show',
         '/blog/(\w+)/(\w+)' => BlogController::class . '@showPage',
+        '/admin/category' => CategoryController::class . '@index',
+        '/admin/category/show/(\w+)' => CategoryController::class . '@show',
+        '/admin/category/add' => CategoryController::class . '@add',
+        '/admin/category/save' => CategoryController::class . '@save',
+        '/admin/category/edit/(\w+)' => CategoryController::class . '@edit',
+        '/admin/category/delete/(\w+)' => CategoryController::class . '@delete',
         // '/catalog/(\d+)' => BlogController::class.'@index',
     ];
 

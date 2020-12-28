@@ -10,12 +10,9 @@ class BaseController
 
     public function render($template, $args = [])
     {
-
-
         foreach ($args as $key => $value) {
             $$key = $value;
         }
-
 
         $template = str_replace('.', DS, $template);
         $template .= '.php';
@@ -36,6 +33,10 @@ class BaseController
         } else {
             echo $content;
         }
+    }
 
+    public function redirect($url)
+    {
+        header("Location: $url");
     }
 }
