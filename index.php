@@ -1,7 +1,7 @@
 <?php
 
-echo "<h1>Hello world</h1>";
-//require_once './vendor/autoload.php';
+
+require_once './vendor/autoload.php';
 //
 //use App\Router;
 //
@@ -11,8 +11,16 @@ echo "<h1>Hello world</h1>";
 //$router = new Router();
 //$router->getRoute();
 
+$client = new \GuzzleHttp\Client(['base_uri' => 'https://www.nbrb.by/api/']);
 
 
+//$resp2 = $client->get('exrates/rates/145', [
+//    'query' => ['ondate' => '10.10.2019'],
+//]);
+//$currency = json_decode($resp2->getBody()->getContents(), true);
+//\App\Helpers\Debugger::debug($currency);
+
+\App\Models\Rate::getCurRate(145, '10.10.2019');
 
 
 

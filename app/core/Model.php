@@ -123,6 +123,12 @@ abstract class Model
 
     public static function create($arr = [])
     {
+        foreach ($arr as $key => $value) {
+            if (!in_array($key, static::$fillable, true)) {
+                unset($arr[$key]);
+            }
+        }
+
         $keys = array_keys($arr);
         $keys = '`' . implode('`,`', $keys) . '`';
 
@@ -132,7 +138,7 @@ abstract class Model
         $tableName = self::getTableName();
         $connection = DB::getConnection();
         $sql = 'INSERT into ' . $tableName . "($keys) VALUES ($values)";
-        $connection->query($sql);
+        $res = $connection->query($sql);
 
         return static::findById($connection->insert_id);
 
