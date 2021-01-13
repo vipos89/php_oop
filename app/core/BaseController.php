@@ -8,8 +8,9 @@ class BaseController
 {
     public $layout = 'base';
 
-    public function render($template, $args = [])
+    public function render($template, $args = [], $status = 200)
     {
+        http_response_code ($status);
         foreach ($args as $key => $value) {
             $$key = $value;
         }

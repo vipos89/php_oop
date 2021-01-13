@@ -12,8 +12,29 @@
         </div>
     </div>
 </header>
-<?= $user->username?> купил <?= $product->name?>
+
 <!-- Main Content -->
 <div class="container">
-    <h1>Main Page</h1>
+    <div class="row">
+        <h1> Новые поступления</h1>
+    </div>
+    <div class="row">
+
+        <?php foreach ($products as $product):?>
+        <div class="col-md-6">
+            <div class="card" style="width: 18rem;">
+                <img src="https://loremflickr.com/320/240" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title"><?=$product->name?></h5>
+                    <p class="card-text">
+                        Категория: <?=$categories[$product->category_id] ?? ''?>
+                        <br>
+                        Брэнд: <?= ($brands[$product->brand_id])->name ?? ''?>
+                    </p>
+                    <a href="/catalog/<?=($categories[$product->category_id])->alias?>/<?=$product->alias?>" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <?php endforeach;?>
+    </div>
 </div>

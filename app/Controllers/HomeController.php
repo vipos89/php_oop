@@ -6,6 +6,8 @@ namespace App\Controllers;
 
 use App\core\BaseController;
 use App\Helpers\Debugger;
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 
@@ -13,23 +15,25 @@ class HomeController extends BaseController
 {
     public function index()
     {
-        // $user = User::findById(1);
-
-        $product = Product::create([
-            'name' => 'Product1',
-            'category_id' => 1,
-            'brand_id' => 1
+        $products = Product::selectWithConditions([
+            'order' => [
+                'field' => 'id',
+                'way' => 'desc'
+            ],
+            'limit' => [
+                'limit' => 10
+            ]
         ]);
-
-        $product->name = 'Product 2';
-        $product->save();
-//        $prod2 = new Product();
-//
-//        $prod2->save();
-
-//        $this->render('home.main', [
-//            'user' => $user,
-//            'product' =>$product
-//        ]);
+        $categories = Category::getAll();
+        $categories_ids = array_column($categories, 'id');
+        $categories = array_combine($categories_ids, $categories);
+        $brands = Brand::getAll();
+        $brands_ids = array_column($brands, 'id');
+        $brands = array_combine($brands_ids, $brands);
+        $this->render('home.main', [
+            'products' => $products,
+            'categories' => $categories,
+            'brands' => $brands
+        ]);
     }
 }
