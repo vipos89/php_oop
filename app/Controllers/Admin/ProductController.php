@@ -3,9 +3,7 @@
 
 namespace App\Controllers\Admin;
 
-
 use App\core\BaseController;
-use App\Helpers\Debugger;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
@@ -93,7 +91,6 @@ class ProductController extends BaseController
         $categories = Category::getAll();
         $brands = Brand::getAll();
 
-
         return $this->render('admin.products.show',
             compact('categories', 'brands')
         );
@@ -104,6 +101,5 @@ class ProductController extends BaseController
     {
         Category::delete(Router::getRouteArgs()[0]);
         return $this->redirect('/admin/category');
-
     }
 }
